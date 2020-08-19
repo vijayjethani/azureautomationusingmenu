@@ -1,8 +1,3 @@
 __MENU DRIVEN AZURE AUTOMATION__
 
-
-
-![MENU](/MENU.png)
-
-
-
+![MENU](images/MENU.png)
