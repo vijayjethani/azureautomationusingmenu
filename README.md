@@ -6,13 +6,13 @@ Script is named menuscript.txt located in Script folder , after downloading scri
 
 
 
-__FIRST LOOK OF MENU__ 
+__***FIRST LOOK OF MENU***__ 
 
 ![MENU](images/menu.PNG)
 
 
 
-__ENTER 1 TO LIST ALL RESOURCE GROUPS IN YOUR SUBSCRIPTION__
+__***ENTER 1 TO LIST ALL RESOURCE GROUPS IN YOUR SUBSCRIPTION***__
 
 
 ![list](images/listresourcegroups.PNG)
@@ -25,12 +25,15 @@ __ASK FOR DELETION IF NOT REQUIRED__
 
 
 __ENTER 4 TO CREATE RESOURCE GROUP AND DEPLOYMENT USING TEMPLATE FILE AND PARAMETER FILE__
+
 __FOR TESTING azuredeploy.json and azuredeploy.parameter.json FILES ARE PROVIDED IN SCRIPT FOLDER__
 
 ![deployment](images/resourcedeployment1.PNG)
 
 __ENTER 5 TO VIEW ROLE ASSIGNMENT OF USER , GROUP OR SPN__
+
 __FOR USER AND GROUP YOU CAN PROVIDE INPUT AT USER@DOMAIN.COM OR GROUP@DOMAIN.COM__
+
 __ALTERNATIVELY YOU CAN PROVIDE OBJECT ID FOR USER , GROUP OR SPN__
 
 ![view](images/viewroleassignment.PNG)
