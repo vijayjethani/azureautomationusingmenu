@@ -5,3 +5,20 @@ Menu Driven program is written keep in mind Task which we do regulary on our Azu
 Here is first look of script
 
 ![MENU](images/MENU.PNG)
+
+
+![MENU](images/menu.PNG)
+
+![list](images/listresourcegroups.PNG)
+
+![empty](images/emptyresourcegroups.PNG)
+
+![deployment](images/resourcedeployment1.PNG)
+
+![view](images/viewroleassignment.PNG)
+
+![roleassign](images/roleassignment.PNG)
+
+![tags](images/tags.PNG)
+
+![exit](images/exit.PNG)
