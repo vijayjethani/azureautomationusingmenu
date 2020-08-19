@@ -6,27 +6,27 @@ Script is named menuscript.txt located in Script folder , after downloading scri
 
 
 
-__***FIRST LOOK OF MENU***__ 
+__*FIRST LOOK OF MENU*__ 
 
 ![MENU](images/menu.PNG)
 
 
 
-__***ENTER 1 TO LIST ALL RESOURCE GROUPS IN YOUR SUBSCRIPTION***__
+__*ENTER 1 TO LIST ALL RESOURCE GROUPS IN YOUR SUBSCRIPTION*__
 
 
 ![list](images/listresourcegroups.PNG)
 
-__ENTER 2 TO LIST EMPTY RESOURCE GROUPS IN YOUR SUBSCRIPTION__
+__*ENTER 2 TO LIST EMPTY RESOURCE GROUPS IN YOUR SUBSCRIPTION*__
 
-__ASK FOR DELETION IF NOT REQUIRED__
+__*ASK FOR DELETION OF EMPTY RESOURCE GROUP IF NOT REQUIRED*__
 
 ![empty](images/emptyresourcegroup.PNG)
 
 
-__ENTER 4 TO CREATE RESOURCE GROUP AND DEPLOYMENT USING TEMPLATE FILE AND PARAMETER FILE__
+__*ENTER 4 TO CREATE RESOURCE GROUP AND DEPLOYMENT USING TEMPLATE FILE AND PARAMETER FILE*__
 
-__FOR TESTING azuredeploy.json and azuredeploy.parameter.json FILES ARE PROVIDED IN SCRIPT FOLDER__
+__*FOR TESTING azuredeploy.json and azuredeploy.parameter.json FILES ARE PROVIDED IN SCRIPT FOLDER*__
 
 ![deployment](images/resourcedeployment1.PNG)
 
