@@ -10,7 +10,10 @@ __FIRST LOOK OF MENU__
 
 ![MENU](images/menu.PNG)
 
+
+
 __ENTER 1 TO LIST ALL RESOURCE GROUPS IN YOUR SUBSCRIPTION __
+
 
 ![list](images/listresourcegroups.PNG)
 
