@@ -1,0 +1,206 @@
+#!/bin/bash
+# MENU DRIVEN AZURE AUTOMATION 
+## ----------------------------------
+# DEFINE VARIABLES USED WITHIN SCRIPT
+# ----------------------------------
+
+local lockresponse
+local rgname
+local lname
+local emptyresponse
+local templatefile
+local parameterfile
+local usrname
+local roleassign
+local deleterg
+local envtag
+local costtag
+RED='\033[0;41;30m'
+STD='\033[0;0;39m'
+
+# -------------------------------------------------------------
+# AFTER END OF TASK - WAIT FOR USER INPUT & GO BACK TO MENU
+# -------------------------------------------------------------
+pause(){
+read -p "Press [Enter] key to continue..." fackEnterKey
+}
+
+#------------------------------------------------------------------------
+# 1. RETRIEVE ALL RESOURCE GROUP IN SUBSCRIPTION ALONG WITH ITS LOCATION 
+#-------------------------------------------------------------------------
+
+
+ALLRG(){
+	echo "Retrieving all Resource groups in subscription"
+	az group list -o table --query "[].{ResourceGroup:name,Location:location}"
+    	pause
+}
+
+#--------------------------------------------------------------------------
+# 2. RETRIEVE EMPTY RESOURCE GROUPS AND ASK FOR DELETION IF NOT REQUIRED
+#-------------------------------------------------------------------------
+NONEMPTYRG(){
+	echo "Retrieving Empty Resource groups in subscription"
+	for i in `az group list -o tsv --query [].name`
+	do if ! [ "$(az resource list -g $i -o tsv)" ]
+	then echo "$i is empty";
+	read -p "Do you want to Delete Empty Resource group Confirm y/n : " emptyresponse
+	if [[ "$emptyresponse" =~ ^(yes|y)$ ]]
+	then
+    az group delete -n $i --yes
+    fi
+	fi
+	done
+        pause
+}
+
+#-------------------------------------------------------------------------------------------
+# 3. PRODUCTION RESOURCE GROUPS SHOULD HAVE MINIMUM DONOTDELETE LOCK
+#    CHECK FOR LOCK STATE OF ALL RESOURCES GROUPS AND ASK TO APPLY DONOTDELETE LOCK IF MISSING
+#-------------------------------------------------------------------------------------------
+
+LOCKRG(){
+	echo "Retrieving LOCK Status of Resource groups in subscription"
+	echo "=========================================================="
+	for i in `az group list -o tsv --query [].name`
+	do if [ "$(az lock list -g $i -o tsv --query [].name)" ]
+	then
+	locktype=$(az lock list -g $i -o tsv --query [].name)
+	echo "RESOURCE GROUP $i is having $locktype Lock "
+	else 
+	echo "========================================================="
+	echo "$i is missing lock";
+	echo "========================================================="
+	echo "                                                         "
+	read -p "Do you want to Apply donotdelete Lock :" lockresponse
+	if [[ "$lockresponse" =~ ^(yes|y)$ ]]
+	then
+    az group lock create --lock-type CanNotDelete -n donotdelete -g $i
+    fi
+	fi
+	done
+        pause
+}
+
+#-------------------------------------------------------------------------------------------
+# 4. AUTOMATING RESOURCE DEPLOYMENT USING ARM TEMPLATE
+#    PROVIDE RESOURCE GROUP NAME, LOCATION , TEMPLATE-FILE AND PARAMETER-FILE 
+#    AZURE RESOURCE GROUP AND RESOURCES WILL BE CREATED 
+#-------------------------------------------------------------------------------------------
+
+RGDEPLOY(){
+	echo "Resource group deployment using Menu requires following Parameters"
+	read -p "Enter Resource Group Name to create : " rgname
+	read -p "Enter Location of Resourcegroup : " lname
+	read -p "Enter Template json file  : " templatefile
+    read -p "Enter Parameter json file : " parameterfile
+	az group create -g $rgname -l $lname
+	az deployment group create -g $rgname --template-file $templatefile --parameters @$parameterfile
+    	pause
+}
+
+#-------------------------------------------------------------------------------------------
+# 5. VIEW ROLE ASSIGNMENT FOR USER , GROUP & SPN 
+#    PROVIDE USER@DOMAIN.COM FOR USER AND GROUP
+#    ALTERNATIVELY YOU CAN PROVIDE OBJECT ID FOR USER , GROUP OR SPN  
+#-------------------------------------------------------------------------------------------
+
+VIEWROLEASSIGN(){
+	echo "Know Role Assignment of User in your subscripiton"
+	read -p "Enter User details in UPN format user@domain : " usrname
+	az role assignment list --all --assignee $usrname
+    	pause
+}
+
+#-------------------------------------------------------------------------------------------
+# 6. ROLE ASSIGNMENT TO USER , SPN OR GROUP
+#    PROVIDE USERNAME IN UPN FORMAT USER@DOMAIN.COM FOR USER ROLE ASSIGNMENT
+#    ALTERNATIVELY YOU CAN PROVIDE OBJECT ID FOR USER , GROUP OR SPN  
+#-------------------------------------------------------------------------------------------
+
+ROLEASSIGN(){
+	echo "ASSIGN ROLE TO USER GROUP OR SPN "
+	read -p "Enter details in UPN format for user and group or object id for SPN : " usrname
+	read -p "Enter Role to be Assigned : " roleassign
+	az role assignment create --assignee $usrname --role $roleassign;
+    	pause
+}
+
+
+#-------------------------------------------------------------------------------------------
+# 7. DELETE RESOURCE GROUP
+#    PROVIDE RESOURCEGROUP NAME AS INPUT 
+# -------------------------------------------------------------------------------------------
+
+RGDELETE(){
+	read -p "Enter Resource group name to be deleted :  " deleterg
+	echo "Deleting Resource group $deleterg "
+	az group delete -n $deleterg
+    	pause
+}
+
+#-------------------------------------------------------------------------------------------
+# 8. UPDATE TAGS ENV AND COSTCENTER TO ALL RESOURCE GROUPS
+#    PROVIDE ENV VALUE LIKE TEST, DEV , PROD AND COSTCENTER NO. 000 , 001 , 002 ETC.. 
+# -------------------------------------------------------------------------------------------
+
+ADDTAG(){
+	read -p "Enter Tag Environment Tag Value : " envtag
+	read -p "Enter Tag Cost Center Value  : " costtag
+	for rgname in `az group list -o tsv --query [].name`
+	do
+	az group update -g $rgname --set tags.Env=$envtag tags.CostCenter=$costtag
+	done
+   	pause
+}
+
+
+# AZURE AUTOMATION LOGIC FOR MENU
+show_menus() {
+	clear
+	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"	
+	echo " S U B S C R I P T I O N    M A N A G E M E N T       M E N U   "
+	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+	echo "1. Display All Resource Groups"
+	echo "2. Display Resource Groups which are Empty and Ask for Deletion if not required"
+	echo "3. Display Lock STATUS of Resource Groups and Ask for applying Lock"
+	echo "4. Resource Group Creation and Deployment using Template File and Parameter File"
+	echo "5. Know Azure Role Assigments of specific User, Group or SPN"
+	echo "6. Assign Role Permission to User , Group or SPN"
+	echo "7. Delete Resource Group"
+	echo "8. Apply Tags to all Resource Groups"
+	echo "9. Exit"
+}
+
+
+read_options(){
+	local choice
+	read -p "Enter choice [ 1 - 9] : " choice
+	case $choice in
+		1) ALLRG ;;
+		2) NONEMPTYRG ;;
+		3) LOCKRG ;;
+		4) RGDEPLOY ;;
+		5) VIEWROLEASSIGN ;;
+		6) ROLEASSIGN ;;
+		7) RGDELETE ;;
+		8) ADDTAG ;;
+		9) exit 0;;
+		*) echo -e "${RED}Error...${STD}" && sleep 2
+	esac
+}
+ 
+# ----------------------------------------------
+# BLOCKING ANY INTERRUPTS FOR SMOOTH RUNNING OF SCRIPT
+# ----------------------------------------------
+trap '' SIGINT SIGQUIT SIGTSTP
+ 
+# -----------------------------------
+# INFINITE LOOP TO RUN AZURE AUTOMATION MENU
+# ------------------------------------
+while true
+do
+ 
+	show_menus
+	read_options
+done
