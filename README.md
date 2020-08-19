@@ -4,13 +4,19 @@ Menu Driven program is written keep in mind Task which we do regulary on our Azu
 
 Script is named menuscript.txt located in Script folder , after downloading script file you can rename this script to menuscript.sh before running in your environment
 
-Here is first look of script , script is located in scripts folder along with sample templatefile and parameter file for deployment
+
+
+__FIRST LOOK OF MENU__ 
 
 ![MENU](images/menu.PNG)
 
 __ENTER 1 TO LIST ALL RESOURCE GROUPS IN YOUR SUBSCRIPTION __
 
 ![list](images/listresourcegroups.PNG)
+
+__ENTER 2 TO LIST EMPTY RESOURCE GROUPS IN YOUR SUBSCRIPTION __
+
+__ASK FOR DELETION IF NOT REQUIRED__
 
 ![empty](images/emptyresourcegroups.PNG)
 
