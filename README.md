@@ -5,6 +5,8 @@ Menu Driven program is written keep in mind Task which we do regulary on our Azu
 Script is named menuscript.txt located in Script folder , after downloading script file you can rename this script to menuscript.sh before running in your environment
 
 
+__IT IS RECOMMENDED YOU RUN THIS MENU DRIVEN SCRIPT IN AZURE CLOUD SHELL AS IT HAS ALL RELEVANT CLIENT BINARIES INSTALLED TO RUN SCRIPT AND AZURE CLI__
+
 
 __*FIRST LOOK OF MENU*__ 
 
